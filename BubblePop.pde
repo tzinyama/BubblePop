@@ -124,7 +124,7 @@ void gameManager(){
     text("By Tino Zinyama", width/2 + 75, 375);
     fill(255);
     textSize(25);
-    text("Press START to Begin", width/2, 420);
+    text("Press ENTER to Begin", width/2, 420);
       
     bubbleManager.run();
     
@@ -155,8 +155,8 @@ void gameManager(){
     text("Select Game Mode", width/2, 420);
     fill(255);
     textSize(18);
-    text("A : Bubble Shooter", width/2, 460);
-    text("B : Bubble Inflator", width/2, 490);
+    text("1 : Bubble Shooter", width/2, 460);
+    text("2 : Bubble Inflator", width/2, 490);
       
     bubbleManager.run();
     
@@ -207,7 +207,7 @@ void gameManager(){
     textSize(40);
     text("Game Paused", width/2, 350);
     textSize(25);
-    text("Press START To Continue", width/2, 420);
+    text("Press ENTER To Continue", width/2, 420);
   }
   //Game Over
   else if (gameState == 4){
@@ -236,7 +236,7 @@ void gameManager(){
     text((score >= highScore ? "New High Score " : "Your Score ") + score, width/2, 410);
     fill(0);
     textSize(20);
-    text("Press START To Continue", width/2, 460);
+    text("Press ENTER To Continue", width/2, 460);
   }
 }
 
@@ -322,15 +322,23 @@ void scoreManager(){
 }
 
 //*************************************************************
+// Manage Mouse Presses
+void mouseReleased(){
+  if(gameState == 1 || gameState == 2){
+     player.shoot(); 
+  }
+}
+
+//*************************************************************
 // Manage Key Presses
 void keyPressed(){
   
   player.target();
   
   //Use mouse buttons instead
-  if ((gameState == 1 || gameState == 2) && (key == TAB || key == 'w')){ //w for controller
+  /*if ((gameState == 1 || gameState == 2) && (key == TAB || key == 'w')){ //w for controller
     player.shoot();
-  }
+  }*/
   
   if (key == ENTER || key ==  'g'){  //g for controller
     switch(gameState){
@@ -361,12 +369,12 @@ void keyPressed(){
     }
   }
   
-  if (gameState == 5 && (key == 'a' || key == 'w')){ //w for controller
+  if (gameState == 5 && (key == '1' || key == 'w')){ //w for controller
     //start bubble shooter mode
     gameState = 1;
     setupLevels();
   }
-  else if (gameState == 5 && (key == 'b' || key == 'd')){ //d for controller
+  else if (gameState == 5 && (key == '2' || key == 'd')){ //d for controller
     //start bubble inflator mode
     gameState = 2;
     setupLevels();

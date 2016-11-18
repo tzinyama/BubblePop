@@ -23,11 +23,15 @@ class Cannon{
   }
   
   void display(){
-    //Set angle to the position of the mouse
-    //float angle = atan2(mouseY-y, mouseX - x);
+    //update crosshair location
+    targX = mouseX;
+    targY = mouseY;
     
-    //Set angle to position of crosshairs
-    float angle = atan2(targY - y, targX - x);
+    //Set angle to the position of the mouse
+    float angle = atan2(mouseY-y, mouseX - x);
+    
+    //Set angle to position of crosshairs. Used with keyboard controls
+    //float angle = atan2(targY - y, targX - x);
     
     cX = (r * cos(angle)) + x;
     cY = (r * sin(angle)) + y; //Calculate end position of the barrel
@@ -62,8 +66,10 @@ class Cannon{
    
   }
   
+  //KEYBOARD CONTROL SCHEME. Move the crosshairs
   void target(){
-    //Move the crosshairs
+    //Used with keyboard control scheme only
+    
     if (keyPressed){ 
       if (key == CODED){
         

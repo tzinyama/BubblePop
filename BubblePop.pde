@@ -30,7 +30,7 @@ AudioPlayer popEffect;
 //time varibles
 float time;
 float timeDelta;
-float maxTime = 20.0;
+static final float MAXTIME = 30.0;
 
 //score variables
 int score;
@@ -177,7 +177,7 @@ void gameManager(){
     //calculate time
     time += timeDelta;
     
-    if (time > maxTime + 0.25)
+    if (time > MAXTIME + 0.25)
       gameState = GameState.GAMEOVER; //game over
   
     backParticles1.run();
@@ -260,7 +260,7 @@ void setupLevels(){
     case PREGAME:  //INTRO SCREEN
       bubbleManager = new BubbleManager(false);
       break;
-    
+   
     case SHOOTER:  //SHOOTER
       isShooter = true;
       bubbleManager = new BubbleManager(false);
@@ -328,7 +328,7 @@ void scoreManager(){
   fill(255);
   textAlign(CENTER, CENTER);
   textSize(20);
-  text("Time: " + int(maxTime - time), width - 50, 25);
+  text("Time: " + int(MAXTIME - time), width - 50, 25);
   
 }
 
@@ -344,9 +344,8 @@ void mouseReleased(){
 // Manage Key Presses
 void keyPressed(){
   
-  player.target();
-  
   //Use mouse buttons instead
+  //player.target();
   /*if ((gameState == 1 || gameState == 2) && (key == TAB || key == 'w')){ //w for controller
     player.shoot();
   }*/

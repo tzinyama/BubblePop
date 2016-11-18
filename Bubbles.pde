@@ -11,12 +11,10 @@ class Bubble{
   boolean isDead;
   color clr;
   
-  
-  //constructor for bubbles that move across the screen
+  //constructor for bubbles that move across the screen i.e in x only
   Bubble(boolean fromLeft){
     x = fromLeft ? -225 : width + 225;
     y = random (0, height);
-    //y = 200;
     
     xspeed =  fromLeft ? random(2) : random(-2);
     yspeed = random(-0.5, 0.25);
@@ -26,8 +24,7 @@ class Bubble{
     clr = colors[int(random(colors.length))];
   }
   
-  
-  
+  //constructor for bubbles that move in both x and y
   Bubble(float tx, float ty){
     x = tx;
     y = ty;
@@ -56,7 +53,7 @@ class Bubble{
   }
   
   
-  //move tha bubbles up and down the screen
+  //move bubbles up and down the screen
   void fall(){
     y += yspeed;
     x += xspeed;
@@ -64,8 +61,8 @@ class Bubble{
     if (y > height - size/2){
       y = height - size/2;  //stay at the bottom
       
-      //TEST CODE
-      xspeed *= -1; //bounce off the bottom
+      //bounce off the bottom
+      xspeed *= -1; 
       yspeed *= -1;
     }
     
@@ -76,8 +73,7 @@ class Bubble{
     if (x < -150 || x > width + 150)
       isDead = true;  //is out of screen hence dead
   }
-  
-  
+    
   //move across the screen
   void drift(){
     x += xspeed;
@@ -109,7 +105,6 @@ class Bubble{
      }     
   }
   
-  
   //collide with inflator bullets
   void inflate(ArrayList<Bullet> inflators){
     
@@ -129,12 +124,11 @@ class Bubble{
       popEffect.rewind();
       popEffect.play();
       
-      size = 180;  //pop animation
+      size = 180;  //pop animation, ine instant increase in size before destruction
       isDead = true;
       score++; //increment score
     }
   }
-  
   
   //collide with other bubbles
   void collideBubbles(Bubble bub){
@@ -145,11 +139,6 @@ class Bubble{
       xspeed *= -1;
       yspeed *= -1;
       
-      //TEST CODE
-      //println(xspeed + " : " + yspeed);
-      //separate balls
-      //x += xspeed < 0 ? size/2 - 3 : size/2 + 3;
-      //y += yspeed < 0 ? size/2 - 3 : size/2 + 3;
     }
   }
 }
@@ -181,12 +170,10 @@ class BubbleManager{
     else{
       bubbles = new ArrayList<Bubble>();
     }
-    
   }
   
   
   void create(){
-    
     //create inflatable bubbles
     if (inflatable){
       if (inflatables.size() < max){
@@ -211,9 +198,7 @@ class BubbleManager{
     }
   }
   
-  
   void run(){
-    
     //run inflatable bubbles
     if (inflatable){
       for (int i = 0; i < inflatables.size(); i++){
@@ -252,5 +237,4 @@ class BubbleManager{
     create();  //attemp to create a new bubble
     waited++; //increment waited frames
   }
-
 }

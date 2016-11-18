@@ -3,9 +3,9 @@
 class Bullet{
   
   Cannon cannon = player;
-  PVector loc= new PVector();
+  PVector loc = new PVector();
   float angle;
-  int age  = 0;
+  int age = 0;
   PVector center;
   PVector turrent;
   boolean isDead;
@@ -31,8 +31,7 @@ class Bullet{
     ellipse(loc.x, loc.y, 10, 10);
   }
   
-  
-   private void move(){
+  private void move(){
     PVector vel = PVector.sub(turrent, center);  //get direction of motion
     loc.add(new PVector(vel.x/8, vel.y/8));
     age++;
@@ -42,7 +41,6 @@ class Bullet{
   boolean isDead(){
     return age > 120;
   }
-    
 }
 
 
@@ -71,6 +69,5 @@ class BulletManager{
         bullets.remove(i);
       }
     }
-    
   }
 }

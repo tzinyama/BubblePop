@@ -70,7 +70,6 @@ void setup(){
   //place player on a random location on screen
   player = new Cannon(random(450, 1450), random(300, 600));
   
-  
   bulletManager = new BulletManager(player);
   
   introParticles1 =  new ParticleManager(width/2, 50, 15);
@@ -84,17 +83,14 @@ void setup(){
   backParticles5 = new ParticleManager(0.9 * width, -100, 10);
   
   gameState = 0;
-  
-  
   score = 0;
   highScore = 0;
   
   time = 0;
-  timeDelta = 0.01666;
+  timeDelta = 0.01666;  // approx time for each frame
   
   setupLevels();
 }
-
 
 //*************************************************************
 //Draw
@@ -102,7 +98,6 @@ void draw(){
   background(0);
   gameManager();
 }
-
 
 //*************************************************************
 //Manage gameplay
@@ -168,7 +163,6 @@ void gameManager(){
   }
   //In Game
   else if (gameState == 1 || gameState == 2){
-    
     //calculate time
     time += timeDelta;
     
@@ -233,8 +227,6 @@ void gameManager(){
     fill(#3F92D2);
     ellipse(width/2, 400, 570, 270);
     
-    
-    
     fill(255);
     textAlign(CENTER, CENTER);
     textSize(40);
@@ -246,10 +238,7 @@ void gameManager(){
     textSize(20);
     text("Press START To Continue", width/2, 460);
   }
-  
-  
 }
-
 
 //*************************************************************
 //Setup the different levels 
@@ -276,9 +265,7 @@ void setupLevels(){
     default:
       break;
   }
-  
 }
-
 
 //*************************************************************
 // Manage Game Scores
@@ -290,7 +277,6 @@ void scoreManager(){
   ellipse(0, 0, 300, 150);
   fill(#3F92D2);
   ellipse(0, 0, 280, 130);
-  
   
   //determine which high score to display
   switch(gameState){
@@ -309,16 +295,6 @@ void scoreManager(){
    default:
      break;
   }
-  
-  ////calculate high score
-  //if (gameState == 1 && score >= highScoreShooter){
-  // highScoreShooter = score;
-  // highScore = highScoreShooter;
-  //}
-  //else if (gameState == 2 && score >= highScoreInflator){
-  // highScoreInflator = score;
-  // highScore = highScoreInflator;
-  //}
   
   //score text
   fill(255);
@@ -345,11 +321,13 @@ void scoreManager(){
   
 }
 
-
+//*************************************************************
+// Manage Key Presses
 void keyPressed(){
   
   player.target();
   
+  //Use mouse buttons instead
   if ((gameState == 1 || gameState == 2) && (key == TAB || key == 'w')){ //w for controller
     player.shoot();
   }
@@ -393,14 +371,11 @@ void keyPressed(){
     gameState = 2;
     setupLevels();
   }
-  
 }
-
 
 //*************************************************************
 //Close the sound channels
 void stop(){
-  //Technique from lynda.com's Interactive Data Visualization with Processing course
   backgroundSong.close();
   gunEffect.close();
   popEffect.close();

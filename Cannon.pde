@@ -1,11 +1,10 @@
 class Cannon{
   //Inspired by "Cannon" by Jashaszun. See Attributions
-  
   float x;
   float y;
   float r = 90;  //radius
   
-  //End points of the barrel
+  //End points of the cannon's barrel
   float cX;
   float cY;
   
@@ -24,11 +23,11 @@ class Cannon{
   }
   
   void display(){
-    
     //Set angle to the position of the mouse
     //float angle = atan2(mouseY-y, mouseX - x);
-    float angle = atan2(targY - y, targX - x);
     
+    //Set angle to position of crosshairs
+    float angle = atan2(targY - y, targX - x);
     
     cX = (r * cos(angle)) + x;
     cY = (r * sin(angle)) + y; //Calculate end position of the barrel
@@ -52,7 +51,6 @@ class Cannon{
     strokeWeight(10);
     line(x, y, cX, cY);
     
-    
     //Draw the target marker
     noFill();
     strokeWeight(2);
@@ -65,10 +63,8 @@ class Cannon{
   }
   
   void target(){
-    
-    //Move the target marker
+    //Move the crosshairs
     if (keyPressed){ 
-      
       if (key == CODED){
         
         //Move target along the x-axis
@@ -93,13 +89,9 @@ class Cannon{
           //set boundary
           if (targY > y + 200) targY = y + 200;
         }
-        
       }
-      
-      
     }
   }
-  
   
   //shoot a bullet
   void shoot(){

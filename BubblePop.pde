@@ -11,6 +11,16 @@ import ddf.minim.signals.*;
 import ddf.minim.spi.*;
 import ddf.minim.ugens.*;
 
+//game state enum
+enum GameState{
+  PREGAME,
+  SHOOTER,
+  INFLATOR,
+  PAUSED,
+  MODESELECT,
+  GAMEOVER
+}
+
 //audio variables
 Minim soundManager;
 AudioPlayer backgroundSong;
@@ -50,7 +60,8 @@ ParticleManager backParticles5;
 color[] colors = {#3AAACF, #6E84D6, #35C0CD, #5EC4CD, #4284D3, #6899D3};
 
 //game variables
-int gameState;  //0 = pre game, 1 = shooter, 2 = inflator, 3 = paused, 4 = game Over, 5 = level select
+//int gameState;  //0 = pre game, 1 = shooter, 2 = inflator, 3 = paused, 4 = game Over, 5 = level select
+GameState gameState;
 boolean isShooter; //flag to determine what mode game was in before being paused
 
 
@@ -82,7 +93,7 @@ void setup(){
   backParticles4 = new ParticleManager(0.7 * width, -100, 10);
   backParticles5 = new ParticleManager(0.9 * width, -100, 10);
   
-  gameState = 0;
+  gameState = GameState.PREGAME;
   score = 0;
   highScore = 0;
   
@@ -103,7 +114,7 @@ void draw(){
 //Manage gameplay
 void gameManager(){
   //Pre Game
-  if (gameState == 0){
+  if (gameState == GameState.PREGAME){
     introParticles1.run();
     introParticles2.run();
     introParticles3.run();
@@ -130,7 +141,7 @@ void gameManager(){
     
   }
   //Game Mode Select Screen
-  else if (gameState == 5){
+  else if (gameState == GameState.MODESELECT){
     introParticles1.run();
     introParticles2.run();
     introParticles3.run();
@@ -162,12 +173,12 @@ void gameManager(){
     
   }
   //In Game
-  else if (gameState == 1 || gameState == 2){
+  else if (gameState == GameState.SHOOTER || gameState == GameState.INFLATOR){
     //calculate time
     time += timeDelta;
     
     if (time > maxTime + 0.25)
-      gameState = 4; //game over
+      gameState = GameState.GAMEOVER; //game over
   
     backParticles1.run();
     backParticles2.run();
@@ -183,7 +194,7 @@ void gameManager(){
     
   }
   //Game Paused
-  else if (gameState == 3){
+  else if (gameState == GameState.PAUSED){
     backParticles1.run();
     backParticles2.run();
     backParticles3.run();
@@ -210,7 +221,7 @@ void gameManager(){
     text("Press ENTER To Continue", width/2, 420);
   }
   //Game Over
-  else if (gameState == 4){
+  else if (gameState == GameState.GAMEOVER){
     backParticles1.run();
     backParticles2.run();
     backParticles3.run();
@@ -246,17 +257,17 @@ void setupLevels(){
   
   switch(gameState){
     
-    case 0:  //INTRO SCREEN
+    case PREGAME:  //INTRO SCREEN
       bubbleManager = new BubbleManager(false);
       break;
     
-    case 1:  //SHOOTER
+    case SHOOTER:  //SHOOTER
       isShooter = true;
       bubbleManager = new BubbleManager(false);
       highScore = highScoreShooter;  //set high score to game mode high score
       break;
       
-    case 2: //POPPER
+    case INFLATOR: //INFLATOR
       isShooter = false;
       bubbleManager = new BubbleManager(true);  //create inflatable bubbles
       highScore = highScoreInflator;  //set high score to game mode high score
@@ -280,13 +291,13 @@ void scoreManager(){
   
   //determine which high score to display
   switch(gameState){
-    case 1: //Bubble shooter mode
+    case SHOOTER: //Bubble shooter mode
       if (score > highScoreShooter){
         highScoreShooter = score;
         highScore = highScoreShooter;
       }
       break;
-    case 2: //Bubble Inflator Mode
+    case INFLATOR: //Bubble Inflator Mode
       if (score > highScoreInflator){
         highScoreInflator = score;
         highScore = highScoreInflator;
@@ -324,7 +335,7 @@ void scoreManager(){
 //*************************************************************
 // Manage Mouse Presses
 void mouseReleased(){
-  if(gameState == 1 || gameState == 2){
+  if(gameState == GameState.SHOOTER || gameState == GameState.INFLATOR){
      player.shoot(); 
   }
 }
@@ -342,25 +353,23 @@ void keyPressed(){
   
   if (key == ENTER || key ==  'g'){  //g for controller
     switch(gameState){
-      case 0:
+      case PREGAME:
         //start shooter mode
-        gameState = 5;  //game select screen
+        gameState = GameState.MODESELECT;  //game mode select screen
         break;
-      case 1:
+      case SHOOTER:
         //pause the game
-        gameState = 3;
+        gameState = GameState.PAUSED;
         break;
-        
-      case 2:
+      case INFLATOR:
         //pause the game
-        gameState = 3;
+        gameState = GameState.PAUSED;
         break;
-        
-      case 3:
+      case PAUSED:
         //continue paused game
-        gameState = (isShooter ? 1 : 2);  //return game to correct statew
+        gameState = (isShooter ? GameState.SHOOTER : GameState.INFLATOR);  //return game to correct statew
         break;
-      case 4:
+      case GAMEOVER:
         //restart the game
         backgroundSong.close();
         setup();
@@ -369,14 +378,14 @@ void keyPressed(){
     }
   }
   
-  if (gameState == 5 && (key == '1' || key == 'w')){ //w for controller
+  if (gameState == GameState.MODESELECT && (key == '1' || key == 'w')){ //w for controller
     //start bubble shooter mode
-    gameState = 1;
+    gameState = GameState.SHOOTER;
     setupLevels();
   }
-  else if (gameState == 5 && (key == '2' || key == 'd')){ //d for controller
+  else if (gameState == GameState.MODESELECT && (key == '2' || key == 'd')){ //d for controller
     //start bubble inflator mode
-    gameState = 2;
+    gameState = GameState.INFLATOR;
     setupLevels();
   }
 }

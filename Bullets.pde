@@ -1,16 +1,16 @@
-//*************************************************************
-//Bullets Class
 class Bullet{
-  
   Cannon cannon = player;
+  
   PVector loc = new PVector();
   float angle;
   int age = 0;
+  
   PVector center;
   PVector turrent;
+  
   boolean isDead;
   
-  //to fix bug where bubbles continually inflates
+  // to fix bug where bubbles continually inflates
   int hits = 0;
   
   Bullet(float x, float y){
@@ -32,20 +32,19 @@ class Bullet{
   }
   
   private void move(){
-    PVector vel = PVector.sub(turrent, center);  //get direction of motion
+    PVector vel = PVector.sub(turrent, center);  // get direction of motion
     loc.add(new PVector(vel.x/8, vel.y/8));
     age++;
   }
   
-  //Check if the bullet is still useful
+  // Check if the bullet is still useful
   boolean isDead(){
     return age > 120;
   }
 }
 
-
 //*************************************************************
-//Bullets Manager Class
+
 class BulletManager{
   
   ArrayList<Bullet> bullets;

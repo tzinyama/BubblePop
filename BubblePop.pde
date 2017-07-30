@@ -3,7 +3,7 @@
   By Tino Zinyama
 */
 
-//audio library import
+// audio library import
 import ddf.minim.*;
 import ddf.minim.analysis.*;
 import ddf.minim.effects.*;
@@ -11,7 +11,7 @@ import ddf.minim.signals.*;
 import ddf.minim.spi.*;
 import ddf.minim.ugens.*;
 
-//game state enum
+// game state enum
 enum GameState{
   PREGAME,
   SHOOTER,
@@ -21,30 +21,30 @@ enum GameState{
   GAMEOVER
 }
 
-//audio variables
+// audio variables
 Minim soundManager;
 AudioPlayer backgroundSong;
 AudioPlayer gunEffect;
 AudioPlayer popEffect;
 
-//time varibles
+// time varibles
 float time;
 float timeDelta;
 static final float MAXTIME = 30.0;
 
-//score variables
+// score variables
 int score;
 int highScore;
-int highScoreShooter = 0;
-int highScoreInflator = 0;
+int shooterHighScore = 0;
+int inflatorHighScore = 0;
 
-//Game object variables
+// Game object variables
 Cannon player;
 BulletManager bulletManager;
 BubbleManager bubbleManager;
 BubbleManager inflatableManager;
 
-//Particla managers for different game stages
+// Particla managers for different game stages
 ParticleManager introParticles1;
 ParticleManager introParticles2;
 ParticleManager introParticles3;
@@ -55,31 +55,28 @@ ParticleManager backParticles3;
 ParticleManager backParticles4;
 ParticleManager backParticles5;
 
-//color palete
-//range of blue colors for bubbles
+// color palete
 color[] colors = {#3AAACF, #6E84D6, #35C0CD, #5EC4CD, #4284D3, #6899D3};
 
-//game variables
-//int gameState;  //0 = pre game, 1 = shooter, 2 = inflator, 3 = paused, 4 = game Over, 5 = level select
 GameState gameState;
-boolean isShooter; //flag to determine what mode game was in before being paused
+boolean isShooter; // flag to determine what mode game was in before being paused
 
 
 void setup(){
-  size (1280, 720);  //full screen hd
+  size (1280, 720);
   smooth();
   frameRate(60);
   noCursor();
   
-  //audio variables
+  // audio variables
   soundManager = new Minim(this);
   backgroundSong = soundManager.loadFile("nightrave.mp3");
   gunEffect = soundManager.loadFile("shoot.mp3");
   popEffect = soundManager.loadFile("pop.mp3");
   backgroundSong.loop();
   
-  //place player on a random location on screen
-  player = new Cannon(random(450, 1450), random(300, 600));
+  // place player on a random location on screen
+  player = new Cannon(random(100, width-100), random(300, height-100));
   
   bulletManager = new BulletManager(player);
   
@@ -103,17 +100,15 @@ void setup(){
   setupLevels();
 }
 
-//*************************************************************
-//Draw
-void draw(){
+void draw()
+{
   background(0);
   gameManager();
 }
 
-//*************************************************************
-//Manage gameplay
-void gameManager(){
-  //Pre Game
+void gameManager()
+{
+  // Pre Game
   if (gameState == GameState.PREGAME){
     introParticles1.run();
     introParticles2.run();
@@ -140,7 +135,7 @@ void gameManager(){
     bubbleManager.run();
     
   }
-  //Game Mode Select Screen
+  // Game Mode Select Screen
   else if (gameState == GameState.MODESELECT){
     introParticles1.run();
     introParticles2.run();
@@ -172,13 +167,12 @@ void gameManager(){
     bubbleManager.run();
     
   }
-  //In Game
+  // In Game
   else if (gameState == GameState.SHOOTER || gameState == GameState.INFLATOR){
-    //calculate time
     time += timeDelta;
     
     if (time > MAXTIME + 0.25)
-      gameState = GameState.GAMEOVER; //game over
+      gameState = GameState.GAMEOVER;
   
     backParticles1.run();
     backParticles2.run();
@@ -193,7 +187,7 @@ void gameManager(){
     scoreManager();
     
   }
-  //Game Paused
+  // Game Paused
   else if (gameState == GameState.PAUSED){
     backParticles1.run();
     backParticles2.run();
@@ -220,7 +214,7 @@ void gameManager(){
     textSize(25);
     text("Press ENTER To Continue", width/2, 420);
   }
-  //Game Over
+  // Game Over
   else if (gameState == GameState.GAMEOVER){
     backParticles1.run();
     backParticles2.run();
@@ -250,10 +244,8 @@ void gameManager(){
     text("Press ENTER To Continue", width/2, 460);
   }
 }
-
-//*************************************************************
-//Setup the different levels 
-void setupLevels(){
+ 
+void setupLevels(){  //Todo: make this into a class
   
   switch(gameState){
     
@@ -264,13 +256,13 @@ void setupLevels(){
     case SHOOTER:  //SHOOTER
       isShooter = true;
       bubbleManager = new BubbleManager(false);
-      highScore = highScoreShooter;  //set high score to game mode high score
+      highScore = shooterHighScore;
       break;
       
     case INFLATOR: //INFLATOR
       isShooter = false;
       bubbleManager = new BubbleManager(true);  //create inflatable bubbles
-      highScore = highScoreInflator;  //set high score to game mode high score
+      highScore = inflatorHighScore;
       break;
 
     default:
@@ -278,10 +270,9 @@ void setupLevels(){
   }
 }
 
-//*************************************************************
-// Manage Game Scores
-void scoreManager(){
-  //score background
+void scoreManager()
+{
+  // score background
   noStroke();
   fill(#0B61A4);
   ellipseMode(CENTER);
@@ -289,18 +280,17 @@ void scoreManager(){
   fill(#3F92D2);
   ellipse(0, 0, 280, 130);
   
-  //determine which high score to display
   switch(gameState){
     case SHOOTER: //Bubble shooter mode
-      if (score > highScoreShooter){
-        highScoreShooter = score;
-        highScore = highScoreShooter;
+      if (score > shooterHighScore){
+        shooterHighScore = score;
+        highScore = shooterHighScore;
       }
       break;
     case INFLATOR: //Bubble Inflator Mode
-      if (score > highScoreInflator){
-        highScoreInflator = score;
-        highScore = highScoreInflator;
+      if (score > inflatorHighScore){
+        inflatorHighScore = score;
+        highScore = inflatorHighScore;
       }
       break;
    default:
@@ -332,44 +322,34 @@ void scoreManager(){
   
 }
 
-//*************************************************************
-// Manage Mouse Presses
 void mouseReleased(){
   if(gameState == GameState.SHOOTER || gameState == GameState.INFLATOR){
      player.shoot(); 
   }
 }
 
-//*************************************************************
-// Manage Key Presses
 void keyPressed(){
-  
-  //Use mouse buttons instead
-  //player.target();
-  /*if ((gameState == 1 || gameState == 2) && (key == TAB || key == 'w')){ //w for controller
-    player.shoot();
-  }*/
   
   if (key == ENTER || key ==  'g'){  //g for controller
     switch(gameState){
       case PREGAME:
-        //start shooter mode
-        gameState = GameState.MODESELECT;  //game mode select screen
+        // start shooter mode
+        gameState = GameState.MODESELECT;
         break;
       case SHOOTER:
-        //pause the game
+        // pause the game
         gameState = GameState.PAUSED;
         break;
       case INFLATOR:
-        //pause the game
+        // pause the game
         gameState = GameState.PAUSED;
         break;
       case PAUSED:
         //continue paused game
-        gameState = (isShooter ? GameState.SHOOTER : GameState.INFLATOR);  //return game to correct statew
+        gameState = (isShooter ? GameState.SHOOTER : GameState.INFLATOR);
         break;
       case GAMEOVER:
-        //restart the game
+        // restart the game
         backgroundSong.close();
         setup();
       default:
@@ -377,21 +357,20 @@ void keyPressed(){
     }
   }
   
-  if (gameState == GameState.MODESELECT && (key == '1' || key == 'w')){ //w for controller
+  if (gameState == GameState.MODESELECT && (key == '1' || key == 'w')){ // w for controller
     //start bubble shooter mode
     gameState = GameState.SHOOTER;
     setupLevels();
   }
-  else if (gameState == GameState.MODESELECT && (key == '2' || key == 'd')){ //d for controller
+  else if (gameState == GameState.MODESELECT && (key == '2' || key == 'd')){ // d for controller
     //start bubble inflator mode
     gameState = GameState.INFLATOR;
     setupLevels();
   }
 }
 
-//*************************************************************
-//Close the sound channels
 void stop(){
+  //Close the sound channels
   backgroundSong.close();
   gunEffect.close();
   popEffect.close();

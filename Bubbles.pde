@@ -1,5 +1,3 @@
-//*************************************************************
-//Bubble Class
 class Bubble{
  
   float x;
@@ -38,13 +36,13 @@ class Bubble{
   
   
   void display(){
-    //Draw main body of the bubble
+    // draw main body of the bubble
     fill(clr);
     noStroke();
     ellipseMode(CENTER);
     ellipse(x, y, size, size);
     
-    //darw the highlight
+    // draw the highlight
     fill(#61B4CF);
     ellipseMode(CORNER);
     ellipse(x + 5, y - 5, size/4, size/5);
@@ -52,29 +50,28 @@ class Bubble{
     ellipseMode(CENTER);
   }
   
-  
-  //move bubbles up and down the screen
+  // move bubbles up and down the screen
   void fall(){
     y += yspeed;
     x += xspeed;
     
     if (y > height - size/2){
-      y = height - size/2;  //stay at the bottom
+      y = height - size/2;  // stay at the bottom
       
-      //bounce off the bottom
+      // bounce off the bottom
       xspeed *= -1; 
       yspeed *= -1;
     }
     
-    //kill offscreen items
+    // kill offscreen items
     if (y < -200)
       isDead = true;
       
     if (x < -150 || x > width + 150)
-      isDead = true;  //is out of screen hence dead
+      isDead = true;
   }
     
-  //move across the screen
+  // move across the screen
   void drift(){
     x += xspeed;
     y += yspeed;
@@ -84,8 +81,7 @@ class Bubble{
       isDead = true;
   }
   
-  
-  //collide with bullets
+  // collide with bullets
   void collide(ArrayList<Bullet> bullets){
     
     for (int i = 0; i < bullets.size(); i++){
@@ -98,14 +94,14 @@ class Bubble{
          popEffect.play();
          
          size += 30;
-         b.isDead = true;  //kill the bullet
-         this.isDead = true;  //kill the bubble
-         score++; //incerement score
+         b.isDead = true;      // kill the bullet
+         this.isDead = true;   // kill the bubble
+         score++; // incerement score
        }
      }     
   }
   
-  //collide with inflator bullets
+  // collide with inflator bullets
   void inflate(ArrayList<Bullet> inflators){
     
     for (int i = 0; i < inflators.size(); i++){
@@ -114,23 +110,23 @@ class Bubble{
       
       if (distance < size/2 && bull.hits == 0){
         bull.hits++;
-        bull.isDead = true;  //kill the bullet
-        this.size += 10; // inflate the bubble
+        bull.isDead = true;  // kill the bullet
+        this.size += 10;     // inflate the bubble
       }
     }
     
     if (size > 150){
-      //play sound effect
+      // play sound effect
       popEffect.rewind();
       popEffect.play();
       
-      size = 180;  //pop animation, ine instant increase in size before destruction
+      size = 180;  // pop animation, i.e. instant increase in size before destruction
       isDead = true;
-      score++; //increment score
+      score++; // increment score
     }
   }
   
-  //collide with other bubbles
+  // collide with other bubbles
   void collideBubbles(Bubble bub){
     float distance = dist(x, y, bub.x, bub.y);
     
@@ -144,8 +140,7 @@ class Bubble{
 }
 
 //*************************************************************
-//Bubble Manager Class
-//For Bubbles that move up and down
+
 class BubbleManager{
   
   ArrayList<Bullet> buls = bulletManager.bullets;
@@ -154,52 +149,51 @@ class BubbleManager{
   ArrayList<Bubble> inflatables;
   
   int max = 10;
-  int delay = 10;  //frames till generation of next bubble
-  int waited = 0;  //frames since the last bubble generation
+  int delay = 10;  // frames till generation of next bubble
+  int waited = 0;  // frames since the last bubble generation
   boolean inflatable;
   
   
   BubbleManager(boolean inflate){
     inflatable = inflate;
     
-    //create infalatble bubbles
+    // create infalatble bubbles
     if (inflate){
       inflatables = new ArrayList<Bubble>();
     }
-    //create standard bubbles
+    // create standard bubbles
     else{
       bubbles = new ArrayList<Bubble>();
     }
   }
   
-  
   void create(){
-    //create inflatable bubbles
+    // create inflatable bubbles
     if (inflatable){
       if (inflatables.size() < max){
         
         if (waited % delay == 0){
           float direction = random(-1, 1);
-          inflatables.add(new Bubble(direction < 0));  //chose random direction for each
-          delay = int(random(60, 100)); //reset the delay
+          inflatables.add(new Bubble(direction < 0));  // chose random direction for each
+          delay = int(random(60, 100)); // reset the delay
         }
       }
       
     }
-    //create standard bubbles
+    // create standard bubbles
     else{
        if (bubbles.size() < max){
          
          if (waited % delay == 0){
            bubbles.add(new Bubble (random(75, width - 75), -150));
-           delay = int(random(60, 150));  //reset the delay
+           delay = int(random(60, 150));  // reset the delay
          }
        }
     }
   }
   
   void run(){
-    //run inflatable bubbles
+    // run inflatable bubbles
     if (inflatable){
       for (int i = 0; i < inflatables.size(); i++){
         Bubble b = inflatables.get(i);
@@ -216,7 +210,7 @@ class BubbleManager{
           inflatables.remove(i);
       }
     }
-    //run standard bubbles
+    // run standard bubbles
     else{
       for (int i = 0; i < bubbles.size(); i++){
         Bubble b = bubbles.get(i);
@@ -234,7 +228,7 @@ class BubbleManager{
       }
     }
     
-    create();  //attemp to create a new bubble
-    waited++; //increment waited frames
+    create();  // attemp to create a new bubble
+    waited++; // increment waited frames
   }
 }

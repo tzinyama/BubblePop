@@ -17,7 +17,7 @@ class Bullet{
     loc.x = x;
     loc.y = y;
     center = new PVector(cannon.x, cannon.y);
-    turrent  =  new PVector(cannon.cX, cannon.cY);
+    turrent  =  new PVector(cannon.barrelX, cannon.barrelY);
   }
   
   void run(){

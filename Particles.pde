@@ -1,11 +1,11 @@
-//*************************************************************
-//Particles Class
 class Particle{
   
   float x;
   float y;
+  
   float xvel;
   float yvel;
+  
   float acceleration;
   float lifespan;
   color clr;
@@ -28,9 +28,9 @@ class Particle{
     display();
   }
   
-  //Update location;
+  // update location;
   void update(){
-    yvel += acceleration;  //gradually gain speed downwards
+    yvel += acceleration;  // gradually gain speed downwards
     
     //move
     x += xvel;
@@ -38,14 +38,13 @@ class Particle{
     lifespan -= 1.0;
   }
   
-  //Method to display
+  // method to display
   void display(){
     noStroke();
-    fill(clr, lifespan);  //gradually become transparent
+    fill(clr, lifespan);  // gradually become transparent
     ellipse(x, y, size, size);
   }
   
-  //Is the particle still useful?
   boolean isDead(){
     if (lifespan < 0.0){
       return true;
@@ -56,7 +55,7 @@ class Particle{
 }
 
 //*************************************************************
-//Particles Manager Class
+
 class ParticleManager{
   
   ArrayList<Particle> particles;

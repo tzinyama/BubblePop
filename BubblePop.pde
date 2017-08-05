@@ -108,141 +108,153 @@ void draw()
 
 void gameManager()
 {
-  // Pre Game
   if (gameState == GameState.PREGAME){
-    introParticles1.run();
-    introParticles2.run();
-    introParticles3.run();
-    
-    noStroke();
-    ellipseMode(CENTER);
-    fill(#0B61A4);
-    ellipse(width/2, 400, 600, 300);
-    fill(#3F92D2);
-    ellipse(width/2, 400, 570, 270);
-    
-    fill(255);
-    textAlign(CENTER, CENTER);
-    textSize(40);
-    text("Bubble Wars", width/2, 350);
-    textSize(10);
-    fill(0);
-    text("By Tino Zinyama", width/2 + 75, 375);
-    fill(255);
-    textSize(25);
-    text("Press ENTER to Begin", width/2, 420);
-      
-    bubbleManager.run();
-    
+    preGame();
   }
-  // Game Mode Select Screen
   else if (gameState == GameState.MODESELECT){
-    introParticles1.run();
-    introParticles2.run();
-    introParticles3.run();
-    
-    noStroke();
-    ellipseMode(CENTER);
-    fill(#0B61A4);
-    ellipse(width/2, 400, 600, 300);
-    fill(#3F92D2);
-    ellipse(width/2, 400, 570, 270);
-    
-    fill(255);
-    textAlign(CENTER, CENTER);
-    textSize(40);
-    text("Bubble Wars", width/2, 350);
-    textSize(10);
-    text("By Tino Zinyama", width/2 + 75, 375);
-    
-    //gun select options
-    fill(0);
-    textSize(25);
-    text("Select Game Mode", width/2, 420);
-    fill(255);
-    textSize(18);
-    text("1 : Bubble Shooter", width/2, 460);
-    text("2 : Bubble Inflator", width/2, 490);
-      
-    bubbleManager.run();
-    
+    gameModeSelect();
   }
-  // In Game
   else if (gameState == GameState.SHOOTER || gameState == GameState.INFLATOR){
-    time += timeDelta;
-    
-    if (time > MAXTIME + 0.25)
-      gameState = GameState.GAMEOVER;
-  
-    backParticles1.run();
-    backParticles2.run();
-    backParticles3.run();
-    backParticles4.run();
-    backParticles5.run();
-        
-    bulletManager.run();
-    bubbleManager.run();
-    player.display();
-    
-    scoreManager();
-    
+    inGame();
   }
-  // Game Paused
   else if (gameState == GameState.PAUSED){
-    backParticles1.run();
-    backParticles2.run();
-    backParticles3.run();
-    backParticles4.run();
-    backParticles5.run();
-    
-    introParticles2.run();
-    introParticles3.run();
-    
-    scoreManager();
-    
-    noStroke();
-    ellipseMode(CENTER);
-    fill(#0B61A4);
-    ellipse(width/2, 400, 600, 300);
-    fill(#3F92D2);
-    ellipse(width/2, 400, 570, 270);
-    
-    fill(255);
-    textAlign(CENTER, CENTER);
-    textSize(40);
-    text("Game Paused", width/2, 350);
-    textSize(25);
-    text("Press ENTER To Continue", width/2, 420);
+    gamePaused();
   }
-  // Game Over
   else if (gameState == GameState.GAMEOVER){
-    backParticles1.run();
-    backParticles2.run();
-    backParticles3.run();
-    backParticles4.run();
-    backParticles5.run();
-    
-    introParticles2.run();
-    introParticles3.run();
-    
-    noStroke();
-    ellipseMode(CENTER);
-    fill(#0B61A4);
-    ellipse(width/2, 400, 600, 300);
-    fill(#3F92D2);
-    ellipse(width/2, 400, 570, 270);
-    
-    fill(255);
-    textAlign(CENTER, CENTER);
-    textSize(40);
-    //choose which highScore to display
-    text( (score >= highScore ? "Congratulations!" : "Game Over"), width/2, 350);
-    textSize(25);
-    text((score >= highScore ? "New High Score " : "Your Score ") + score, width/2, 410);
-    fill(0);
-    textSize(20);
-    text("Press ENTER To Continue", width/2, 460);
+    gameOver();
   }
+}
+
+void preGame(){
+  introParticles1.run();
+  introParticles2.run();
+  introParticles3.run();
+  
+  noStroke();
+  ellipseMode(CENTER);
+  fill(#0B61A4);
+  ellipse(width/2, 400, 600, 300);
+  fill(#3F92D2);
+  ellipse(width/2, 400, 570, 270);
+  
+  fill(255);
+  textAlign(CENTER, CENTER);
+  textSize(40);
+  text("Bubble Wars", width/2, 350);
+  textSize(10);
+  fill(0);
+  text("By Tino Zinyama", width/2 + 75, 375);
+  fill(255);
+  textSize(25);
+  text("Press ENTER to Begin", width/2, 420);
+    
+  bubbleManager.run();
+}
+
+void gameModeSelect(){
+  introParticles1.run();
+  introParticles2.run();
+  introParticles3.run();
+  
+  noStroke();
+  ellipseMode(CENTER);
+  fill(#0B61A4);
+  ellipse(width/2, 400, 600, 300);
+  fill(#3F92D2);
+  ellipse(width/2, 400, 570, 270);
+  
+  fill(255);
+  textAlign(CENTER, CENTER);
+  textSize(40);
+  text("Bubble Wars", width/2, 350);
+  textSize(10);
+  text("By Tino Zinyama", width/2 + 75, 375);
+  
+  //gun select options
+  fill(0);
+  textSize(25);
+  text("Select Game Mode", width/2, 420);
+  fill(255);
+  textSize(18);
+  text("1 : Bubble Shooter", width/2, 460);
+  text("2 : Bubble Inflator", width/2, 490);
+    
+  bubbleManager.run(); 
+}
+
+void inGame(){
+  time += timeDelta;
+    
+  if (time > MAXTIME + 0.25)
+    gameState = GameState.GAMEOVER;
+
+  backParticles1.run();
+  backParticles2.run();
+  backParticles3.run();
+  backParticles4.run();
+  backParticles5.run();
+      
+  bulletManager.run();
+  bubbleManager.run();
+  player.display();
+  
+  scoreManager();
+}
+
+void gamePaused(){
+  backParticles1.run();
+  backParticles2.run();
+  backParticles3.run();
+  backParticles4.run();
+  backParticles5.run();
+  
+  introParticles2.run();
+  introParticles3.run();
+  
+  scoreManager();
+  
+  noStroke();
+  ellipseMode(CENTER);
+  fill(#0B61A4);
+  ellipse(width/2, 400, 600, 300);
+  fill(#3F92D2);
+  ellipse(width/2, 400, 570, 270);
+  
+  fill(255);
+  textAlign(CENTER, CENTER);
+  textSize(40);
+  text("Game Paused", width/2, 350);
+  textSize(25);
+  text("Press ENTER To Continue", width/2, 420); 
+}
+
+void gameOver(){
+  backParticles1.run();
+  backParticles2.run();
+  backParticles3.run();
+  backParticles4.run();
+  backParticles5.run();
+  
+  introParticles2.run();
+  introParticles3.run();
+  
+  noStroke();
+  ellipseMode(CENTER);
+  fill(#0B61A4);
+  ellipse(width/2, 400, 600, 300);
+  fill(#3F92D2);
+  ellipse(width/2, 400, 570, 270);
+  
+  fill(255);
+  textAlign(CENTER, CENTER);
+  textSize(40);
+  //choose which highScore to display
+  text( (score >= highScore ? "Congratulations!" : "Game Over"), width/2, 350);
+  textSize(25);
+  text((score >= highScore ? "New High Score " : "Your Score ") + score, width/2, 410);
+  fill(0);
+  textSize(20);
+  text("Press ENTER To Continue", width/2, 460);
 }
  
 void setupLevels(){  //Todo: make this into a class
